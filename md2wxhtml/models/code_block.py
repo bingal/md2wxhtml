@@ -1,7 +1,6 @@
-# Code block data structures
-
-from typing import Optional, Dict, Any, List
+from typing import Optional, Dict, Any, List, Tuple
 from dataclasses import dataclass, field
+
 
 @dataclass
 class CodeBlock:
@@ -10,10 +9,12 @@ class CodeBlock:
     metadata: Optional[Dict[str, Any]] = field(default_factory=dict)
     placeholder: Optional[str] = None
 
+
 @dataclass
 class ProcessingContext:
     placeholder_map: Dict[str, CodeBlock] = field(default_factory=dict)
     state: Dict[str, Any] = field(default_factory=dict)
+
 
 @dataclass
 class ConversionResult:
@@ -22,3 +23,4 @@ class ConversionResult:
     success: bool = True
     errors: List[str] = field(default_factory=list)
     warnings: List[str] = field(default_factory=list)
+    links: Dict[str, Tuple[int, str]] = field(default_factory=dict)

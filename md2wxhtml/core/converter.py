@@ -4,6 +4,7 @@ from .markdown_parser import extract_code_blocks
 from ..processors.content_processor import process_content
 from ..processors.code_processor import process_code_block
 from ..processors.image_processor import process_images
+from ..processors.link_processor import md_links_to_index
 from ..models.code_block import ConversionResult
 
 
@@ -28,13 +29,15 @@ class WeChatConverter:
     def convert(self, markdown: str, base_dir: Optional[Path] = None) -> ConversionResult:
         # 1. Extract code blocks
         clean_md, code_blocks, placeholder_map = extract_code_blocks(markdown)
-        # 2. Process general content
+        # 2. Convert links to numbered references
+        clean_md, links = md_links_to_index(clean_md)
+        # 3. Process general content
         html_with_placeholders = process_content(clean_md, theme=self.content_theme)
-        # 3. Process code blocks
+        # 4. Process code blocks
         code_html_map = {}
         for cb in code_blocks:
             code_html_map[cb.placeholder] = process_code_block(cb, theme=self.code_theme)
-        # 4. Merge components
+        # 5. Merge components
         for placeholder, code_html in code_html_map.items():
             html_with_placeholders = html_with_placeholders.replace(placeholder, code_html)
         all_warnings = []
@@ -56,4 +59,5 @@ class WeChatConverter:
             success=len(all_errors) == 0,
             errors=all_errors,
             warnings=all_warnings,
+            links=links,
         )

@@ -4,15 +4,16 @@ import markdown
 from bs4 import BeautifulSoup
 from premailer import transform
 
-from ..processors.themes import blue, dark, default, github, green, hammer, red
+from ..processors.themes import blue, dark, default, github, green, green_simple, hammer, red
 
 theme_map = {
-    "default": default,
+    "default": green_simple,
     "github": github,
     "hammer": hammer,
     "dark": dark,
     "blue": blue,
     "green": green,
+    "green_simple": green_simple,
     "red": red,
 }
 
